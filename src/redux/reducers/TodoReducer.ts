@@ -15,7 +15,7 @@ import {
 export interface ITodo {
     id:string,
     text:string,
-    isCompleted: boolean,
+    isComplete: boolean,
     isEdit: boolean,
 
 }
@@ -45,12 +45,13 @@ export const TodoReducer = (state:State = initState, action:ActionType):State =>
         case ON_TODO_ADD:{
             return {
                 ...state,
-                todos: [...state.todos, {
+                todos: [{
                     id: `${action.text+ state.todos.length}`,
                     text: action.text,
-                    isCompleted: false,
+                    isComplete: false,
                     isEdit:false,
-                }],
+                }, ...state.todos],
+
                 inputText: ''
             }
         }
@@ -107,7 +108,7 @@ export const TodoReducer = (state:State = initState, action:ActionType):State =>
                             ...el, text:el.text, isEdit:!el.isEdit
                         }
                     }
-                    return el;
+                    return {...el, isEdit: false};
                 }),
             }
         }
@@ -132,13 +133,14 @@ export const TodoReducer = (state:State = initState, action:ActionType):State =>
                 todos: state.todos.map(el=>{
                     if (el.id===action.id){
                         return {
-                            ...el, isCompleted:!el.isCompleted
+                            ...el, isComplete:!el.isComplete
                         }
                     }
                     return el
                 })
             }
         }
+
 
         default: return state
     }

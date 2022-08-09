@@ -48,8 +48,9 @@ const Todo = () => {
                     />
                 </div>
                 <div>
-                    <Button variant="outlined" size="small"
+                    <Button variant="outlined" size="large"
                             onClick={()=>{dispatch(onTodoAdd(text))}}
+                            disabled={!text}
                     >
                         ADD
                     </Button>

@@ -4,103 +4,135 @@ import {cancelEdit, completedTodo, onEditAdd, onEditChange, onTodoDelete, onTodo
 import { Button, Checkbox, TextField} from '@mui/material';
 import {useTypedSelector} from '../hooks/useTypedSelector';
 
+
 interface Props{
     todo: any
 }
 
-const TodoList = (props: Props) => {
+const TodoList = ({todo}: Props) => {
 
     const editText = useTypedSelector((state):string => state.todo.editText)
     const dispatch = useDispatch()
 
     return(
-        (!props.todo.isEdit) ?
-        <div key={props.todo.id}
+        (!todo.isEdit) ?
+        <div key={todo.id}
              style={{
                  borderBottom:'1px solid grey',
                  margin:10,
                  display:'flex',
-                 justifyContent:'flex-start',
+                 justifyContent:'space-between',
                  alignItems:'center',
+                 fontSize: 'large'
 
              }}
         >
-            <Checkbox/>
-            <div>{props.todo.text}</div>
-            <div>
-                <Button variant="outlined" size="small"
-                        style={{margin:15}}
-                        onClick={()=>{
-                            dispatch(setEdit(props.todo.id))
-                            dispatch(onEditChange(props.todo.text))
-                        }}
+            <div style={{display:'flex', justifyContent:'flex-start', alignItems:'center'}}>
+                <Checkbox
+                    onClick={()=>dispatch(completedTodo(todo.id))}
+                    color={(todo.isCompleted) ? 'success' : 'primary'}
+
+                />
+                <div style={{textDecoration:(todo.isCompleted) ? 'line-through' : 'none',
+                    color:(todo.isComplete) ? '#2E7D32' : '#282c34',
+                    textAlign:'start',
+                    maxWidth:'max-content'}}
+                     onClick={()=>{
+                         dispatch(setEdit(todo.id))
+                         dispatch(onEditChange(todo.text))}}
                 >
-                    Edit
-                </Button>
+                    {todo.text}
+                </div>
             </div>
-            <div>
-                <Button variant="outlined" size="small"
-                        style={{margin:15}}
-                        onClick={()=> {
-                            dispatch(onTodoDelete(props.todo.id))
-                        }}
-                >
-                    Delete
-                </Button>
-            </div>
+
+
+                <div style={{display:'flex', justifyContent:'space-between'}}>
+                    <Button variant="outlined" size="small"
+                            style={{margin: 15}}
+                            onClick={() => {
+                                dispatch(setEdit(todo.id))
+                                dispatch(onEditChange(todo.text))
+                            }}
+                            disabled={todo.isComplete}
+                    >
+                        Edit
+                    </Button>
+
+
+                    <Button variant="outlined" size="small"
+                            style={{margin:15}}
+                            onClick={()=> {
+                                dispatch(onTodoDelete(todo.id))
+                            }}
+                            color={(todo.isComplete) ? 'success' : 'primary'}
+                    >
+                        Delete
+                    </Button>
+                </div>
+
+
+
         </div>
 
         :
 
-        <div key={props.todo.id}
+        <div key={todo.id}
              style={{
                  borderBottom:'1px solid grey',
                  margin:10,
                  display:'flex',
-                 justifyContent:'flex-start',
+                 justifyContent:'space-between',
                  alignItems:'center',
 
              }}
         >
+            <div style={{display:'flex', justifyContent:'flex-start', alignItems:'center'}}>
             <Checkbox
-            onClick={()=>dispatch(completedTodo(props.todo.id))}
-            checked={props.todo.isCompleted}
+                onClick={()=>dispatch(completedTodo(todo.id))}
+                color={(todo.isComplete) ? 'error' : 'primary'}
+                disabled={todo.isEdit}
+
             />
-            <div>
                 <TextField
                     id="standard-textarea111"
+                    fullWidth
                     multiline
+                    style={{minWidth:'800px'}}
                     variant="standard"
                     value={editText}
+                    size={'medium'}
                     onChange={(e)=>
                     {dispatch(onEditChange(e.target.value))}}
+                    autoFocus={todo.isEdit}
                     onKeyDown={(ev) => {
                         if (ev.key === 'Enter') {
                             dispatch(onEditAdd(editText))
                         }
                         if (ev.key==='Escape'){
-                            dispatch(cancelEdit(props.todo.id))
+                            dispatch(cancelEdit(todo.id))
                         }
                     }
                     }
+
+
                 />
             </div>
-            <div>
+            <div style={{display:'flex', justifyContent:'space-between'}}>
                 <Button variant="outlined" size="small"
                         style={{margin:15}}
                         onClick={()=>{
-                            dispatch(onTodoEdit(props.todo.id))
+                            dispatch(onTodoEdit(todo.id))
                         }}
+                        color={(todo.isComplete) ? 'success' : 'primary'}
                 >
                     Edit
                 </Button>
-            </div>
-            <div>
                 <Button variant="outlined" size="small"
                         style={{margin:15}}
                         onClick={()=> {
-                            dispatch(onTodoDelete(props.todo.id))
+                            dispatch(onTodoDelete(todo.id))
                         }}
+                        color={(todo.isComplete) ? 'success' : 'primary'}
                 >
                     Delete
                 </Button>

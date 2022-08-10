@@ -1,7 +1,7 @@
 import {
     ActionType,
     CANCEL_EDIT,
-    COMPLETED_TODO,
+    COMPLETE_TODO,
     ON_EDIT_ADD,
     ON_EDIT_CHANGE,
     ON_TEXT_CHANGE,
@@ -28,7 +28,7 @@ export interface State {
 }
 
 const initState:State = {
-    todos: [],
+    todos: (localStorage['redux-store']) ? JSON.parse(localStorage['redux-store']) : [],
     inputText: '',
     todosCount: 0,
     editText: ''
@@ -43,6 +43,12 @@ export const TodoReducer = (state:State = initState, action:ActionType):State =>
             }
         }
         case ON_TODO_ADD:{
+            localStorage['redux-store'] = JSON.stringify([{
+                id: `${action.text+ state.todos.length}`,
+                text: action.text,
+                isComplete: false,
+                isEdit:false,
+            }, ...state.todos])
             return {
                 ...state,
                 todos: [{
@@ -56,6 +62,11 @@ export const TodoReducer = (state:State = initState, action:ActionType):State =>
             }
         }
         case ON_TODO_DELETE:{
+            localStorage['redux-store'] = JSON.stringify(state.todos.filter(el=>{
+                if(el.id !== action.id){
+                    return el
+                }
+            }))
             return {
                 ...state,
                 todos: state.todos.filter(el=>{
@@ -67,6 +78,14 @@ export const TodoReducer = (state:State = initState, action:ActionType):State =>
         }
 
         case ON_TODO_EDIT:{
+            localStorage['redux-store'] = JSON.stringify(state.todos.map(el=>{
+                if(el.id === action.id){
+                    return{
+                        ...el, text: state.editText, isEdit:false
+                    }
+                }
+                return el;
+            }))
             return {
                 ...state,
                 todos: state.todos.map(el=>{
@@ -127,7 +146,15 @@ export const TodoReducer = (state:State = initState, action:ActionType):State =>
             }
         }
 
-        case COMPLETED_TODO:{
+        case COMPLETE_TODO:{
+            localStorage['redux-store'] = JSON.stringify(state.todos.map(el=>{
+                if (el.id===action.id){
+                    return {
+                        ...el, isComplete:!el.isComplete
+                    }
+                }
+                return el
+            }))
             return {
                 ...state,
                 todos: state.todos.map(el=>{

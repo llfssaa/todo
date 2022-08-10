@@ -32,9 +32,11 @@ const Todo = () => {
                 <div>
                     <TextField
                         id="standard-textarea"
+                        fullWidth
                         label="ToDo..."
                         placeholder="Write your next task here.."
                         multiline
+                        color='info'
                         variant="standard"
                         value={text}
                         onChange={(e)=>

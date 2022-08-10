@@ -1,8 +1,9 @@
 import React from 'react';
 import {useDispatch} from 'react-redux';
 import {cancelEdit, completedTodo, onEditAdd, onEditChange, onTodoDelete, onTodoEdit, setEdit} from '../redux/actions';
-import { Button, Checkbox, TextField} from '@mui/material';
+import {Button, Checkbox, IconButton, TextField} from '@mui/material';
 import {useTypedSelector} from '../hooks/useTypedSelector';
+import ClearIcon from '@mui/icons-material/Clear';
 
 
 interface Props{
@@ -30,10 +31,11 @@ const TodoList = ({todo}: Props) => {
             <div style={{display:'flex', justifyContent:'flex-start', alignItems:'center'}}>
                 <Checkbox
                     onClick={()=>dispatch(completedTodo(todo.id))}
-                    color={(todo.isCompleted) ? 'success' : 'primary'}
+                    color={(todo.isComplete) ? 'success' : 'primary'}
+                    checked={todo.isComplete}
 
                 />
-                <div style={{textDecoration:(todo.isCompleted) ? 'line-through' : 'none',
+                <div style={{textDecoration:(todo.isComplete) ? 'line-through' : 'none',
                     color:(todo.isComplete) ? '#2E7D32' : '#282c34',
                     textAlign:'start',
                     maxWidth:'max-content'}}
@@ -86,9 +88,8 @@ const TodoList = ({todo}: Props) => {
 
              }}
         >
-            <div style={{display:'flex', justifyContent:'flex-start', alignItems:'center'}}>
+            <div style={{display:'flex', justifyContent:'flex-start', alignItems:'center', width:'100%'}}>
             <Checkbox
-                onClick={()=>dispatch(completedTodo(todo.id))}
                 color={(todo.isComplete) ? 'error' : 'primary'}
                 disabled={todo.isEdit}
 
@@ -96,28 +97,32 @@ const TodoList = ({todo}: Props) => {
                 <TextField
                     id="standard-textarea111"
                     fullWidth
-                    multiline
-                    style={{minWidth:'800px'}}
+                    autoFocus
                     variant="standard"
                     value={editText}
-                    size={'medium'}
                     onChange={(e)=>
                     {dispatch(onEditChange(e.target.value))}}
-                    autoFocus={todo.isEdit}
                     onKeyDown={(ev) => {
                         if (ev.key === 'Enter') {
-                            dispatch(onEditAdd(editText))
+                            dispatch(onTodoEdit(todo.id))
                         }
                         if (ev.key==='Escape'){
                             dispatch(cancelEdit(todo.id))
                         }
                     }
                     }
-
-
                 />
+
             </div>
             <div style={{display:'flex', justifyContent:'space-between'}}>
+                <IconButton size="small"
+                            color='error'
+                            onClick={()=>{
+                                dispatch(cancelEdit(todo.id))
+                }}
+                >
+                    <ClearIcon/>
+                </IconButton>
                 <Button variant="outlined" size="small"
                         style={{margin:15}}
                         onClick={()=>{

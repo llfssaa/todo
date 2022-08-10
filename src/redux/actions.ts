@@ -7,7 +7,7 @@ export const ON_EDIT_CHANGE = 'ON_EDIT_CHANGE'
 export const ON_EDIT_ADD = 'ON_EDIT_ADD'
 export const SET_EDIT = 'SET_EDIT'
 export const CANCEL_EDIT = 'CANCEL_EDIT'
-export const COMPLETED_TODO = 'COMPLETED_TODO'
+export const COMPLETE_TODO = 'COMPLETE_TODO'
 
 
 interface OnTextChangeActionType {
@@ -47,8 +47,8 @@ interface CancelEditActionType {
     type:typeof CANCEL_EDIT,
     id: string
 }
-interface CompletedTodoActionType {
-    type:typeof COMPLETED_TODO,
+interface CompleteTodoActionType {
+    type:typeof COMPLETE_TODO,
     id: string
 }
 
@@ -56,7 +56,7 @@ interface CompletedTodoActionType {
 export type ActionType = OnTextChangeActionType | OnTodoAddActionType |
     OnCheckChangeActionType | OnTodoDeleteActionType | OnTodoEditActionType |
     OnEditChangeActionType | OnEditAddActionType | SetEditActionType    |
-    CancelEditActionType  | CompletedTodoActionType
+    CancelEditActionType  | CompleteTodoActionType
 
 
 export const onTextChange = (text:string):OnTextChangeActionType => {
@@ -109,7 +109,7 @@ export const cancelEdit = (id:string):CancelEditActionType =>({
     id
 })
 
-export const completedTodo = (id:string):CompletedTodoActionType =>({
-    type: COMPLETED_TODO,
+export const completedTodo = (id:string):CompleteTodoActionType =>({
+    type: COMPLETE_TODO,
     id
 })

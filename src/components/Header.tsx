@@ -4,20 +4,18 @@ import AddIcon from '@mui/icons-material/Add';
 const Header = () => {
     return (
         <div style={{
-            borderBottom:'1px solid grey',
+            height:'40px',
             display:'flex',
             justifyContent:'end',
             alignItems:'center',
+            padding:15,
+            paddingBottom:5,
+            backgroundColor:'#1976D9',
+            boxShadow:'15px 0 15px grey',
+            color:'whitesmoke'
 
         }}>
-            <div style={{
-                margin:10,
-            }}
-            >Login</div>
-            <div style={{
-                margin:10,
-            }}
-            > New list</div>
+          My first ToDo...
         </div>
     );
 };
